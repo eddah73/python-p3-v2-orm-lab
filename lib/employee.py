@@ -11,7 +11,8 @@ class Employee:
         self.id = id
         self.name = name
         self.job_title = job_title
-        self.department_id = department_id
+        self.department_id = department_id    
+
 
     def __repr__(self):
         return (
@@ -187,4 +188,11 @@ class Employee:
 
     def reviews(self):
         """Return list of reviews associated with current employee"""
-        pass
+        from review import Review
+        sql = """
+            SELECT * FROM reviews
+            WHERE employee_id = ?
+        """
+
+        rows = CURSOR.execute(sql, (self.id,)).fetchall()
+        return [Review.instance_from_db(row) for row in rows]
